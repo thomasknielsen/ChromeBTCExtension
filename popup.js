@@ -19,10 +19,18 @@ async function fetchBitcoinPrice() {
         hourlyChange = currentPrice - hourAgoPrice;
         changePercent = (hourlyChange / hourAgoPrice) * 100;
         
-        if (changePercent > 0.5) {
-          changeClass = 'up';
-        } else if (changePercent < -0.5) {
+        // Match the logic in background.js
+        // Any decrease shows as down/red
+        if (hourlyChange < 0) {
           changeClass = 'down';
+        } 
+        // Increase of more than 0.5% shows as up/green
+        else if (changePercent > 0.5) {
+          changeClass = 'up';
+        }
+        // Otherwise flat/grey
+        else {
+          changeClass = 'flat';
         }
       }
       
@@ -34,7 +42,17 @@ async function fetchBitcoinPrice() {
       if (changeElement) {
         const sign = hourlyChange >= 0 ? '+' : '';
         changeElement.innerText = `${sign}$${hourlyChange.toFixed(2)} (${sign}${changePercent.toFixed(2)}%)`;
-        changeElement.className = changeClass;
+        
+        // Clear existing classes and set the new one
+        changeElement.classList.remove('up', 'down', 'flat');
+        changeElement.classList.add(changeClass);
+        
+        // For debugging
+        console.log("Price change:", {
+          hourlyChange,
+          changePercent,
+          changeClass
+        });
       }
     } catch (error) {
       document.getElementById('price').innerText = 'Error fetching price';

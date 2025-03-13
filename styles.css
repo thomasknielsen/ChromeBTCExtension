@@ -25,17 +25,17 @@ body {
     border-radius: 4px;
   }
   
-  .up {
+  #price-change.up {
     color: white;
     background-color: #4CAF50;
   }
   
-  .down {
+  #price-change.down {
     color: white;
     background-color: #F44336;
   }
   
-  .flat {
+  #price-change.flat {
     color: white;
     background-color: #9E9E9E;
   }
