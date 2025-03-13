@@ -1,9 +1,9 @@
 async function fetchBitcoinPrice() {
     try {
       // Get current price
-      const currentResponse = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
-      const currentData = await currentResponse.json();
-      const currentPrice = currentData.bitcoin.usd;
+      const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
+      const data = await response.json();
+      const currentPrice = data.bitcoin.usd;
       
       // Get hourly price change
       const oneHourAgo = Math.floor(Date.now() / 1000) - 3600;
@@ -19,16 +19,15 @@ async function fetchBitcoinPrice() {
         hourlyChange = currentPrice - hourAgoPrice;
         changePercent = (hourlyChange / hourAgoPrice) * 100;
         
-        // Match the logic in background.js
-        // Any decrease shows as down/red
+        // Price is down
         if (hourlyChange < 0) {
           changeClass = 'down';
         } 
-        // Increase of more than 0.5% shows as up/green
+        // Price is up more than 0.5%
         else if (changePercent > 0.5) {
           changeClass = 'up';
         }
-        // Otherwise flat/grey
+        // Price is flat or minimal change
         else {
           changeClass = 'flat';
         }
@@ -42,18 +41,15 @@ async function fetchBitcoinPrice() {
       if (changeElement) {
         const sign = hourlyChange >= 0 ? '+' : '';
         changeElement.innerText = `${sign}$${hourlyChange.toFixed(2)} (${sign}${changePercent.toFixed(2)}%)`;
-        
-        // Clear existing classes and set the new one
-        changeElement.classList.remove('up', 'down', 'flat');
-        changeElement.classList.add(changeClass);
-        
-        // For debugging
-        console.log("Price change:", {
-          hourlyChange,
-          changePercent,
-          changeClass
-        });
+        changeElement.className = changeClass; // Set class directly
       }
+      
+      console.log("Popup updated:", {
+        price: currentPrice,
+        hourlyChange,
+        changePercent,
+        changeClass
+      });
     } catch (error) {
       document.getElementById('price').innerText = 'Error fetching price';
       console.error(error);
@@ -61,7 +57,7 @@ async function fetchBitcoinPrice() {
   }
   
   // Fetch price when the popup loads
-  fetchBitcoinPrice();
+  document.addEventListener('DOMContentLoaded', fetchBitcoinPrice);
   
   // Update price every 30 seconds
   setInterval(fetchBitcoinPrice, 30000);

@@ -57,44 +57,34 @@ async function updateBadge() {
       displayPrice = Math.round(currentPrice).toString();
     }
     
-    // Set badge text with a smaller size
+    // Set badge text
     chrome.action.setBadgeText({ text: displayPrice });
     
-    // Make badge smaller by increasing top margin and reducing height
-    chrome.action.setBadgeTextMargin({ top: 5, bottom: 5, left: 1, right: 1 });
-    
     // Determine badge color based on price change
-    // Using direct hex color values to avoid any conversion issues
     let badgeColor;
     
     // Price is down compared to an hour ago
     if (currentPrice < lastHourPrice) {
-      badgeColor = [244, 67, 54, 255]; // Red - RGBA format
+      badgeColor = '#F44336'; // Red
     }
     // Price is up more than 0.5% 
     else if (currentPrice > lastHourPrice * 1.005) {
-      badgeColor = [76, 175, 80, 255]; // Green - RGBA format
+      badgeColor = '#4CAF50'; // Green
     }
     // Price is flat (within ±0.5%)
     else {
-      badgeColor = [158, 158, 158, 255]; // Grey - RGBA format
+      badgeColor = '#9E9E9E'; // Grey
     }
     
-    // Use the direct color array format
+    // Set badge background color
     chrome.action.setBadgeBackgroundColor({ color: badgeColor });
     
-    // Log the current badge status for debugging
-    console.log("Price status:", {
-      current: currentPrice,
-      previous: lastHourPrice,
-      difference: currentPrice - lastHourPrice,
-      color: badgeColor
+    console.log("Badge updated:", {
+      price: currentPrice,
+      display: displayPrice,
+      color: badgeColor,
+      lastHourPrice: lastHourPrice
     });
-    
-    // Update the lastHourPrice after 1 hour
-    setTimeout(() => {
-      lastHourPrice = currentPrice;
-    }, 3600000); // 1 hour in milliseconds
   }
 }
 
