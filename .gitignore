@@ -1,0 +1,28 @@
+# Windows system files
+Thumbs.db
+desktop.ini
+
+# VS Code / Windsurf
+.vscode/
+
+# Windows temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# Node.js dependencies
+node_modules/
+npm-debug.log
+
+# Chrome extension packaging
+*.crx
+*.pem
+*.zip
+
+# Environment variables
+.env
+.env.local
+
+# System Files
+.DS_Store
