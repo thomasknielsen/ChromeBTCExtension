@@ -57,17 +57,25 @@ async function updateBadge() {
       displayPrice = Math.round(currentPrice).toString();
     }
     
-    // Set badge text
+    // Set badge text with a smaller size
     chrome.action.setBadgeText({ text: displayPrice });
     
-    // Determine badge color based on price change
+    // Add padding to make badge smaller and show more of the icon
+    chrome.action.setBadgeTextMargin({ top: 2, bottom: 0, left: 1, right: 1 });
+    
+    // Determine badge color based on price change - fix to ensure red when down
     let badgeColor;
-    if (currentPrice > lastHourPrice * 1.005) { // Up more than 0.5%
-      badgeColor = '#4CAF50'; // Green
-    } else if (currentPrice < lastHourPrice * 0.995) { // Down more than 0.5%
+    // Price is down compared to an hour ago
+    if (currentPrice < lastHourPrice) {
       badgeColor = '#F44336'; // Red
-    } else {
-      badgeColor = '#9E9E9E'; // Grey (flat)
+    }
+    // Price is up more than 0.5% 
+    else if (currentPrice > lastHourPrice * 1.005) {
+      badgeColor = '#4CAF50'; // Green
+    }
+    // Price is flat (within ±0.5%)
+    else {
+      badgeColor = '#9E9E9E'; // Grey
     }
     
     // Set badge background color
