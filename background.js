@@ -60,26 +60,36 @@ async function updateBadge() {
     // Set badge text with a smaller size
     chrome.action.setBadgeText({ text: displayPrice });
     
-    // Add padding to make badge smaller and show more of the icon
-    chrome.action.setBadgeTextMargin({ top: 2, bottom: 0, left: 1, right: 1 });
+    // Make badge smaller by increasing top margin and reducing height
+    chrome.action.setBadgeTextMargin({ top: 5, bottom: 5, left: 1, right: 1 });
     
-    // Determine badge color based on price change - fix to ensure red when down
+    // Determine badge color based on price change
+    // Using direct hex color values to avoid any conversion issues
     let badgeColor;
+    
     // Price is down compared to an hour ago
     if (currentPrice < lastHourPrice) {
-      badgeColor = '#F44336'; // Red
+      badgeColor = [244, 67, 54, 255]; // Red - RGBA format
     }
     // Price is up more than 0.5% 
     else if (currentPrice > lastHourPrice * 1.005) {
-      badgeColor = '#4CAF50'; // Green
+      badgeColor = [76, 175, 80, 255]; // Green - RGBA format
     }
     // Price is flat (within ±0.5%)
     else {
-      badgeColor = '#9E9E9E'; // Grey
+      badgeColor = [158, 158, 158, 255]; // Grey - RGBA format
     }
     
-    // Set badge background color
+    // Use the direct color array format
     chrome.action.setBadgeBackgroundColor({ color: badgeColor });
+    
+    // Log the current badge status for debugging
+    console.log("Price status:", {
+      current: currentPrice,
+      previous: lastHourPrice,
+      difference: currentPrice - lastHourPrice,
+      color: badgeColor
+    });
     
     // Update the lastHourPrice after 1 hour
     setTimeout(() => {
