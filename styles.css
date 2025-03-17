@@ -45,3 +45,34 @@ body {
     color: #777;
     margin-top: 5px;
   }
+
+  .api-status {
+    font-size: 11px;
+    color: #777;
+    margin-top: 10px;
+    padding-top: 5px;
+    border-top: 1px solid #eee;
+  }
+
+  .api-status span.ok {
+    color: #4CAF50;
+  }
+
+  .api-status span.error {
+    color: #F44336;
+  }
+
+  .api-status span.warning {
+    color: #FF9800;
+  }
+
+  .last-fetch-time {
+    font-size: 11px;
+    color: #777;
+    margin-top: 5px;
+    font-style: italic;
+  }
+
+  .last-fetch-time.stale {
+    color: #FF9800;
+  }

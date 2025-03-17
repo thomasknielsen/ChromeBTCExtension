@@ -60,18 +60,18 @@ async function updateBadge() {
     // Set badge text
     chrome.action.setBadgeText({ text: displayPrice });
     
-    // Determine badge color based on price change
+    // Determine badge color based on price change - any change shows as color
     let badgeColor;
     
-    // Price is down compared to an hour ago
+    // Price is down compared to an hour ago - any decrease
     if (currentPrice < lastHourPrice) {
       badgeColor = '#F44336'; // Red
     }
-    // Price is up more than 0.5% 
-    else if (currentPrice > lastHourPrice * 1.005) {
+    // Price is up compared to an hour ago - any increase
+    else if (currentPrice > lastHourPrice) {
       badgeColor = '#4CAF50'; // Green
     }
-    // Price is flat (within ±0.5%)
+    // Price is exactly the same as an hour ago
     else {
       badgeColor = '#9E9E9E'; // Grey
     }
@@ -83,7 +83,8 @@ async function updateBadge() {
       price: currentPrice,
       display: displayPrice,
       color: badgeColor,
-      lastHourPrice: lastHourPrice
+      lastHourPrice: lastHourPrice,
+      priceChange: currentPrice - lastHourPrice
     });
   }
 }
